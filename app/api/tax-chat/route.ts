@@ -8,7 +8,11 @@ import {
   UIDataTypes,
   stepCountIs,
 } from "ai"
-import { openai } from "@ai-sdk/openai"
+import { createOpenAI } from "@ai-sdk/openai"
+
+const openai = createOpenAI({
+  compatibility: "compatible",
+})
 import * as z from "zod"
 import {
   calculateIndianTax,
