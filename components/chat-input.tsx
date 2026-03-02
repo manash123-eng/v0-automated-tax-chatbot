@@ -49,7 +49,7 @@ export function ChatInput({ onSend, isDisabled, isStreaming }: ChatInputProps) {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="Ask about your taxes, deductions, or income..."
+        placeholder="Ask about your income tax, deductions, or savings..."
         className={cn(
           "flex-1 resize-none bg-transparent px-3 py-2 text-sm leading-relaxed",
           "placeholder:text-muted-foreground focus:outline-none",

@@ -5,9 +5,9 @@ import { Bot, User } from "lucide-react"
 import type { TaxChatMessage } from "@/app/api/tax-chat/route"
 import {
   TaxResultCard,
-  TaxBracketsCard,
+  TaxSlabsCard,
   DeductionInfoCard,
-  TaxCreditsCard,
+  TaxSavingTipsCard,
 } from "./tax-tool-cards"
 
 export function ChatMessage({ message }: { message: TaxChatMessage }) {
@@ -40,7 +40,7 @@ export function ChatMessage({ message }: { message: TaxChatMessage }) {
         )}
       >
         <span className="text-xs font-medium text-muted-foreground px-1">
-          {isUser ? "You" : "TaxBot AI"}
+          {isUser ? "You" : "SmartTax AI"}
         </span>
         <div className="flex flex-col gap-0">
           {message.parts.map((part, index) => {
@@ -75,9 +75,9 @@ export function ChatMessage({ message }: { message: TaxChatMessage }) {
                   />
                 )
 
-              case "tool-getTaxBrackets":
+              case "tool-getTaxSlabs":
                 return (
-                  <TaxBracketsCard
+                  <TaxSlabsCard
                     key={index}
                     data={
                       part.state === "output-available"
@@ -99,16 +99,14 @@ export function ChatMessage({ message }: { message: TaxChatMessage }) {
                   />
                 )
 
-              case "tool-calculateCredits":
+              case "tool-getTaxSavingTips":
                 return (
-                  <TaxCreditsCard
+                  <TaxSavingTipsCard
                     key={index}
                     data={
                       part.state === "output-available"
                         ? part.output
-                        : part.state === "input-available"
-                          ? { state: "calculating", message: "Calculating your credits..." }
-                          : { state: "unknown" }
+                        : { state: "loading" }
                     }
                   />
                 )

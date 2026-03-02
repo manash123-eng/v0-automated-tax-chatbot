@@ -47,9 +47,9 @@ export default function TaxChatPage() {
             <Calculator className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-sm font-semibold text-foreground">TaxBot AI</h1>
+            <h1 className="text-sm font-semibold text-foreground">SmartTax AI</h1>
             <p className="text-xs text-muted-foreground">
-              2025 Federal Tax Assistant
+              Indian Income Tax Assistant
             </p>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function TaxChatPage() {
             isStreaming={isStreaming}
           />
           <p className="mt-2 text-center text-[10px] text-muted-foreground/60">
-            TaxBot AI uses 2025 IRS data. For educational purposes only.
+            SmartTax AI uses Indian Income Tax Act data. For educational purposes only.
           </p>
         </div>
       </div>

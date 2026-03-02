@@ -7,8 +7,8 @@ const _inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const _jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 
 export const metadata: Metadata = {
-  title: 'TaxBot AI - Smart Tax Filing Assistant',
-  description: 'AI-powered tax filing assistant that guides you through income reporting, deductions, and tax calculations based on 2025 federal tax brackets.',
+  title: 'SmartTax AI - Indian Income Tax Filing Assistant',
+  description: 'AI-powered Indian income tax assistant that guides you through income reporting, deductions under 80C/80D, and tax calculations based on Indian tax slabs.',
   generator: 'v0.app',
   icons: {
     icon: [

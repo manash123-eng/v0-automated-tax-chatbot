@@ -1,155 +1,178 @@
-// 2025 Federal Tax Brackets (Source: IRS Revenue Procedure 2024-40, Tax Foundation)
-export type FilingStatus = "single" | "married_jointly" | "head_of_household"
+// Indian Income Tax Slabs (New Regime - Default, FY 2025-26)
+export type EmploymentType = "salaried" | "business" | "freelancer"
 
-export interface TaxBracket {
+export interface TaxSlab {
   rate: number
   min: number
   max: number | null
 }
 
-export const TAX_BRACKETS: Record<FilingStatus, TaxBracket[]> = {
-  single: [
-    { rate: 0.10, min: 0, max: 11925 },
-    { rate: 0.12, min: 11925, max: 48475 },
-    { rate: 0.22, min: 48475, max: 103350 },
-    { rate: 0.24, min: 103350, max: 197300 },
-    { rate: 0.32, min: 197300, max: 250525 },
-    { rate: 0.35, min: 250525, max: 626350 },
-    { rate: 0.37, min: 626350, max: null },
-  ],
-  married_jointly: [
-    { rate: 0.10, min: 0, max: 23850 },
-    { rate: 0.12, min: 23850, max: 96950 },
-    { rate: 0.22, min: 96950, max: 206700 },
-    { rate: 0.24, min: 206700, max: 394600 },
-    { rate: 0.32, min: 394600, max: 501050 },
-    { rate: 0.35, min: 501050, max: 751600 },
-    { rate: 0.37, min: 751600, max: null },
-  ],
-  head_of_household: [
-    { rate: 0.10, min: 0, max: 17000 },
-    { rate: 0.12, min: 17000, max: 64850 },
-    { rate: 0.22, min: 64850, max: 103350 },
-    { rate: 0.24, min: 103350, max: 197300 },
-    { rate: 0.32, min: 197300, max: 250500 },
-    { rate: 0.35, min: 250500, max: 626350 },
-    { rate: 0.37, min: 626350, max: null },
-  ],
+// New Tax Regime (Default)
+export const NEW_REGIME_SLABS: TaxSlab[] = [
+  { rate: 0.00, min: 0, max: 250000 },
+  { rate: 0.05, min: 250001, max: 500000 },
+  { rate: 0.20, min: 500001, max: 1000000 },
+  { rate: 0.30, min: 1000001, max: null },
+]
+
+// Old Tax Regime
+export const OLD_REGIME_SLABS: TaxSlab[] = [
+  { rate: 0.00, min: 0, max: 250000 },
+  { rate: 0.05, min: 250001, max: 500000 },
+  { rate: 0.20, min: 500001, max: 1000000 },
+  { rate: 0.30, min: 1000001, max: null },
+]
+
+export const EMPLOYMENT_LABELS: Record<EmploymentType, string> = {
+  salaried: "Salaried",
+  business: "Business",
+  freelancer: "Freelancer",
 }
 
-export const STANDARD_DEDUCTIONS: Record<FilingStatus, number> = {
-  single: 15000,
-  married_jointly: 30000,
-  head_of_household: 22500,
-}
-
-export const FILING_STATUS_LABELS: Record<FilingStatus, string> = {
-  single: "Single",
-  married_jointly: "Married Filing Jointly",
-  head_of_household: "Head of Household",
-}
-
-// Common deduction categories
+// Common Indian deductions
 export const DEDUCTION_CATEGORIES = [
-  { id: "mortgage_interest", label: "Mortgage Interest", maxDeduction: null },
-  { id: "state_local_taxes", label: "State & Local Taxes (SALT)", maxDeduction: 10000 },
-  { id: "charitable", label: "Charitable Contributions", maxDeduction: null },
-  { id: "medical", label: "Medical Expenses (over 7.5% AGI)", maxDeduction: null },
-  { id: "student_loan_interest", label: "Student Loan Interest", maxDeduction: 2500 },
-  { id: "educator_expenses", label: "Educator Expenses", maxDeduction: 300 },
-  { id: "hsa_contributions", label: "HSA Contributions", maxDeduction: null },
-  { id: "retirement_401k", label: "401(k) Contributions", maxDeduction: 23500 },
-  { id: "ira_contributions", label: "IRA Contributions", maxDeduction: 7000 },
+  {
+    id: "80c",
+    section: "80C",
+    label: "Investments (PPF, ELSS, LIC, NSC, 5-yr FD, etc.)",
+    maxDeduction: 150000,
+    description: "Most popular deduction. Includes EPF, PPF, ELSS, life insurance premiums, tuition fees, NSC, and more.",
+  },
+  {
+    id: "80d_self",
+    section: "80D",
+    label: "Health Insurance Premium (Self & Family)",
+    maxDeduction: 25000,
+    description: "Premium paid for self, spouse, and dependent children. Rs 50,000 if you are a senior citizen.",
+  },
+  {
+    id: "80d_parents",
+    section: "80D",
+    label: "Health Insurance Premium (Parents)",
+    maxDeduction: 50000,
+    description: "Premium for parents. Rs 25,000 if parents are below 60, Rs 50,000 if senior citizens.",
+  },
+  {
+    id: "80ccd_nps",
+    section: "80CCD(1B)",
+    label: "NPS Contribution (Additional)",
+    maxDeduction: 50000,
+    description: "Additional deduction for NPS contributions over and above 80C limit.",
+  },
+  {
+    id: "80e",
+    section: "80E",
+    label: "Education Loan Interest",
+    maxDeduction: null,
+    description: "Interest paid on education loan for higher studies. No upper limit, available for up to 8 years.",
+  },
+  {
+    id: "80tta",
+    section: "80TTA",
+    label: "Savings Account Interest",
+    maxDeduction: 10000,
+    description: "Interest earned on savings bank account (not FD). Rs 50,000 for senior citizens under 80TTB.",
+  },
+  {
+    id: "hra",
+    section: "HRA",
+    label: "House Rent Allowance",
+    maxDeduction: null,
+    description: "Exemption under section 10(13A) for salaried individuals paying rent. Calculation depends on salary, rent paid, and city.",
+  },
+  {
+    id: "standard_deduction",
+    section: "Sec 16",
+    label: "Standard Deduction (Salaried)",
+    maxDeduction: 50000,
+    description: "Flat deduction of Rs 50,000 for salaried employees under old regime.",
+  },
 ] as const
 
-export function calculateFederalTax(
+export function formatINR(amount: number): string {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount)
+}
+
+export function calculateIndianTax(
   grossIncome: number,
-  filingStatus: FilingStatus,
   totalDeductions: number,
-  useItemized: boolean
 ): {
-  taxableIncome: number
+  netTaxableIncome: number
   totalTax: number
   effectiveRate: number
-  marginalRate: number
-  deductionUsed: number
-  deductionType: string
-  bracketBreakdown: { rate: number; taxableAtRate: number; taxAtRate: number }[]
+  cess: number
+  taxBeforeCess: number
+  slabBreakdown: { rate: number; taxableAtRate: number; taxAtRate: number; range: string }[]
 } {
-  const standardDeduction = STANDARD_DEDUCTIONS[filingStatus]
-  const useStandard = !useItemized || totalDeductions <= standardDeduction
-  const deductionUsed = useStandard ? standardDeduction : totalDeductions
-  const deductionType = useStandard ? "Standard" : "Itemized"
+  const netTaxableIncome = Math.max(0, grossIncome - totalDeductions)
+  const slabs = NEW_REGIME_SLABS
 
-  const taxableIncome = Math.max(0, grossIncome - deductionUsed)
-  const brackets = TAX_BRACKETS[filingStatus]
+  let taxBeforeCess = 0
+  const slabBreakdown: { rate: number; taxableAtRate: number; taxAtRate: number; range: string }[] = []
 
-  let totalTax = 0
-  let marginalRate = 0.10
-  const bracketBreakdown: { rate: number; taxableAtRate: number; taxAtRate: number }[] = []
+  for (const slab of slabs) {
+    const upper = slab.max ?? Infinity
+    if (netTaxableIncome <= slab.min) break
 
-  for (const bracket of brackets) {
-    const upper = bracket.max ?? Infinity
-    if (taxableIncome <= bracket.min) break
+    const taxableAtRate = Math.min(netTaxableIncome, upper) - slab.min
+    const taxAtRate = taxableAtRate * slab.rate
 
-    const taxableAtRate = Math.min(taxableIncome, upper) - bracket.min
-    const taxAtRate = taxableAtRate * bracket.rate
-
-    bracketBreakdown.push({
-      rate: bracket.rate,
-      taxableAtRate: Math.round(taxableAtRate * 100) / 100,
-      taxAtRate: Math.round(taxAtRate * 100) / 100,
+    slabBreakdown.push({
+      rate: slab.rate,
+      taxableAtRate: Math.round(taxableAtRate),
+      taxAtRate: Math.round(taxAtRate),
+      range: slab.max
+        ? `${formatINR(slab.min)} - ${formatINR(slab.max)}`
+        : `Above ${formatINR(slab.min)}`,
     })
 
-    totalTax += taxAtRate
-    marginalRate = bracket.rate
+    taxBeforeCess += taxAtRate
   }
 
-  const effectiveRate = taxableIncome > 0 ? (totalTax / grossIncome) * 100 : 0
+  // Tax rebate under 87A: If net taxable income <= 5,00,000 then full rebate
+  if (netTaxableIncome <= 500000) {
+    taxBeforeCess = 0
+    // Clear slab breakdown tax amounts since rebate applies
+    slabBreakdown.forEach((s) => (s.taxAtRate = 0))
+  }
+
+  // Health & Education Cess = 4%
+  const cess = Math.round(taxBeforeCess * 0.04)
+  const totalTax = Math.round(taxBeforeCess + cess)
+  const effectiveRate = grossIncome > 0 ? Math.round((totalTax / grossIncome) * 10000) / 100 : 0
 
   return {
-    taxableIncome: Math.round(taxableIncome * 100) / 100,
-    totalTax: Math.round(totalTax * 100) / 100,
-    effectiveRate: Math.round(effectiveRate * 100) / 100,
-    marginalRate: marginalRate * 100,
-    deductionUsed: Math.round(deductionUsed * 100) / 100,
-    deductionType,
-    bracketBreakdown,
+    netTaxableIncome: Math.round(netTaxableIncome),
+    totalTax,
+    effectiveRate,
+    cess,
+    taxBeforeCess: Math.round(taxBeforeCess),
+    slabBreakdown,
   }
 }
 
-// EITC simplified calculation
-export function calculateEITC(
-  earnedIncome: number,
-  filingStatus: FilingStatus,
-  numChildren: number
-): number {
-  const maxCredits = [649, 4328, 7152, 8046]
-  const maxCredit = maxCredits[Math.min(numChildren, 3)]
+// Tax saving suggestions based on income level
+export function getTaxSavingSuggestions(grossIncome: number): string[] {
+  const suggestions: string[] = []
+  suggestions.push("Invest up to Rs 1.5 lakh under Section 80C (PPF, ELSS, LIC, EPF)")
+  suggestions.push("Get health insurance for self & family (Section 80D - up to Rs 25,000)")
 
-  // Simplified phaseout
-  const phaseoutStart =
-    filingStatus === "married_jointly"
-      ? [17730, 30470, 30470, 30470]
-      : [10620, 23350, 23350, 23350]
+  if (grossIncome > 500000) {
+    suggestions.push("Consider NPS contribution for additional Rs 50,000 deduction under 80CCD(1B)")
+    suggestions.push("Claim HRA exemption if you are salaried and paying rent")
+  }
+  if (grossIncome > 1000000) {
+    suggestions.push("Explore ELSS mutual funds for tax-efficient investing with 3-year lock-in")
+    suggestions.push("Consider health insurance for parents (Section 80D - up to Rs 50,000 for senior citizen parents)")
+  }
+  if (grossIncome > 1500000) {
+    suggestions.push("Review if Old Regime with full deductions gives you a lower tax than New Regime")
+  }
 
-  const phaseoutEnd =
-    filingStatus === "married_jointly"
-      ? [26214, 57554, 64430, 68675]
-      : [19104, 50434, 57310, 61555]
-
-  const idx = Math.min(numChildren, 3)
-  if (earnedIncome >= phaseoutEnd[idx]) return 0
-  if (earnedIncome <= phaseoutStart[idx]) return maxCredit
-
-  const phaseoutRate =
-    maxCredit / (phaseoutEnd[idx] - phaseoutStart[idx])
-  const reduction = (earnedIncome - phaseoutStart[idx]) * phaseoutRate
-
-  return Math.max(0, Math.round((maxCredit - reduction) * 100) / 100)
-}
-
-// Child tax credit
-export function calculateChildTaxCredit(numChildren: number): number {
-  return numChildren * 2000
+  return suggestions
 }
