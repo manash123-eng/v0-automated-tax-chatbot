@@ -8,6 +8,7 @@ import {
   UIDataTypes,
   stepCountIs,
 } from "ai"
+import { openai } from "@ai-sdk/openai"
 import * as z from "zod"
 import {
   calculateFederalTax,
@@ -190,7 +191,7 @@ export async function POST(req: Request) {
   })
 
   const result = streamText({
-    model: "openai/gpt-5-mini",
+    model: openai("gpt-4o-mini"),
     system: SYSTEM_PROMPT,
     messages: await convertToModelMessages(messages),
     stopWhen: stepCountIs(5),
